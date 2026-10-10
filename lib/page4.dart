@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'page5.dart';
+
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -8,14 +10,25 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountPageState extends State<CreateAccountPage> {
+  // --------------------------------------------------
+  // TEXT CONTROLLERS
+  // --------------------------------------------------
+
   final TextEditingController nameController =
       TextEditingController();
+
   final TextEditingController emailController =
       TextEditingController();
+
   final TextEditingController passwordController =
       TextEditingController();
+
   final TextEditingController confirmPasswordController =
       TextEditingController();
+
+  // --------------------------------------------------
+  // PAGE STATE
+  // --------------------------------------------------
 
   bool hidePassword = true;
   bool hideConfirmPassword = true;
@@ -27,10 +40,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
   void initState() {
     super.initState();
 
+    // Refresh password requirements while typing.
     passwordController.addListener(() {
       setState(() {});
     });
 
+    // Refresh password-match status while typing.
     confirmPasswordController.addListener(() {
       setState(() {});
     });
@@ -38,12 +53,18 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
   @override
   void dispose() {
+    // Dispose controllers when the page is removed.
     nameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     confirmPasswordController.dispose();
+
     super.dispose();
   }
+
+  // --------------------------------------------------
+  // REUSABLE INPUT ICON
+  // --------------------------------------------------
 
   Widget circularInputIcon(IconData icon) {
     return Padding(
@@ -63,6 +84,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       ),
     );
   }
+
+  // --------------------------------------------------
+  // REUSABLE TEXT FIELD
+  // --------------------------------------------------
 
   Widget inputField({
     required TextEditingController controller,
@@ -89,18 +114,24 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
           vertical: 14,
           horizontal: 16,
         ),
+
+        // Default border.
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(32),
           borderSide: const BorderSide(
             color: Color(0xFFF0C5C7),
           ),
         ),
+
+        // Border when the field is not focused.
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(32),
           borderSide: const BorderSide(
             color: Color(0xFFF0C5C7),
           ),
         ),
+
+        // Border when the user selects the field.
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(32),
           borderSide: const BorderSide(
@@ -111,6 +142,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       ),
     );
   }
+
+  // --------------------------------------------------
+  // LANGUAGE SELECTION FIELD
+  // --------------------------------------------------
 
   Widget languageField() {
     return GestureDetector(
@@ -150,6 +185,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 
+  // Show the available languages in a bottom sheet.
   void showLanguagePicker() {
     final languages = [
       'English',
@@ -179,6 +215,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                // Small handle at the top of the sheet.
                 Container(
                   width: 45,
                   height: 5,
@@ -187,7 +224,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
                 const Text(
                   'Select Language',
                   style: TextStyle(
@@ -196,20 +235,26 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                     color: Color(0xFF24443C),
                   ),
                 ),
+
                 const SizedBox(height: 15),
+
                 ...languages.map(
                   (language) => ListTile(
                     title: Text(language),
+
+                    // Mark the currently selected language.
                     trailing: selectedLanguage == language
                         ? const Icon(
                             Icons.check,
                             color: Color(0xFFD56369),
                           )
                         : null,
+
                     onTap: () {
                       setState(() {
                         selectedLanguage = language;
                       });
+
                       Navigator.pop(context);
                     },
                   ),
@@ -222,33 +267,47 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 
+  // --------------------------------------------------
+  // PASSWORD VALIDATION
+  // --------------------------------------------------
+
+  // Password must contain at least eight characters.
   bool get hasMinLength =>
       passwordController.text.length >= 8;
 
+  // Password must contain an uppercase letter.
   bool get hasUppercase =>
       RegExp(r'[A-Z]').hasMatch(passwordController.text);
 
+  // Password must contain a lowercase letter.
   bool get hasLowercase =>
       RegExp(r'[a-z]').hasMatch(passwordController.text);
 
+  // Password must contain a number.
   bool get hasNumber =>
       RegExp(r'[0-9]').hasMatch(passwordController.text);
 
+  // Password must contain at least one non-alphanumeric character.
   bool get hasSpecialCharacter =>
-      RegExp(r'[!@#$%^&*(),.?":{}|<>_\-\\/\[\]]')
-          .hasMatch(passwordController.text);
+      RegExp(r'[^A-Za-z0-9]').hasMatch(passwordController.text);
 
+  // Confirm password must match the original password.
   bool get passwordsMatch =>
       passwordController.text.isNotEmpty &&
       passwordController.text ==
           confirmPasswordController.text;
 
+  // All password requirements must be satisfied.
   bool get passwordIsValid =>
       hasMinLength &&
       hasUppercase &&
       hasLowercase &&
       hasNumber &&
       hasSpecialCharacter;
+
+  // --------------------------------------------------
+  // PASSWORD REQUIREMENT INDICATOR
+  // --------------------------------------------------
 
   Widget passwordRequirement(
     String text,
@@ -279,6 +338,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 
+  // Display password requirements after typing begins.
   Widget passwordRequirements() {
     if (passwordController.text.isEmpty) {
       return const SizedBox.shrink();
@@ -322,7 +382,12 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 
+  // --------------------------------------------------
+  // CREATE ACCOUNT VALIDATION
+  // --------------------------------------------------
+
   void createAccount() {
+    // Close the keyboard before showing validation messages.
     FocusScope.of(context).unfocus();
 
     if (nameController.text.trim().isEmpty) {
@@ -371,10 +436,19 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
       return;
     }
 
-    showMessage(
-      'All details are valid. Firebase will be connected next.',
+    // This is a placeholder until account creation is connected
+    // to Firebase Authentication or another authentication service.
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreateProfilePage(),
+      ),
     );
   }
+
+  // --------------------------------------------------
+  // SNACKBAR MESSAGE
+  // --------------------------------------------------
 
   void showMessage(String message) {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -386,30 +460,43 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
     );
   }
 
+  // --------------------------------------------------
+  // PAGE UI
+  // --------------------------------------------------
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+
       body: LayoutBuilder(
         builder: (context, constraints) {
           final screenHeight = constraints.maxHeight;
 
           return Stack(
             children: [
+              // Background image shared with the authentication pages.
               Positioned.fill(
                 child: Image.asset(
                   'assets/bg/bg2.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
+
+              // Subtle dark overlay for readability.
               Positioned.fill(
                 child: Container(
                   color: Colors.black.withValues(alpha: 0.04),
                 ),
               ),
+
               SafeArea(
                 child: Stack(
                   children: [
+                    // ------------------------------------------
+                    // BACK BUTTON
+                    // ------------------------------------------
+
                     Positioned(
                       top: 8,
                       left: 12,
@@ -421,8 +508,9 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color:
-                                  Colors.black.withValues(alpha: 0.12),
+                              color: Colors.black.withValues(
+                                alpha: 0.12,
+                              ),
                               blurRadius: 8,
                               offset: const Offset(0, 3),
                             ),
@@ -442,13 +530,16 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                       ),
                     ),
 
+                    // ------------------------------------------
+                    // PAGE HEADING
+                    // ------------------------------------------
+
                     Positioned(
                       top: screenHeight * 0.14,
                       left: 40,
                       right: 40,
                       child: Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
                             'Create',
@@ -474,8 +565,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                             height: 4,
                             decoration: BoxDecoration(
                               color: const Color(0xFFE6A16A),
-                              borderRadius:
-                                  BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10),
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -490,6 +580,10 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                         ],
                       ),
                     ),
+
+                    // ------------------------------------------
+                    // CREATE ACCOUNT FORM CARD
+                    // ------------------------------------------
 
                     Positioned(
                       left: 24,
@@ -511,19 +605,24 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                           borderRadius: BorderRadius.circular(32),
                           boxShadow: [
                             BoxShadow(
-                              color:
-                                  Colors.black.withValues(alpha: 0.08),
+                              color: Colors.black.withValues(
+                                alpha: 0.08,
+                              ),
                               blurRadius: 18,
                               offset: const Offset(0, 6),
                             ),
                           ],
                         ),
+
+                        // Allows the form to scroll on smaller screens
+                        // and when the keyboard is visible.
                         child: SingleChildScrollView(
                           keyboardDismissBehavior:
                               ScrollViewKeyboardDismissBehavior.onDrag,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              // Full name.
                               inputField(
                                 controller: nameController,
                                 hintText: 'Full Name',
@@ -532,21 +631,22 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
                               const SizedBox(height: 8),
 
+                              // Preferred language.
                               languageField(),
 
                               const SizedBox(height: 8),
 
+                              // Email address or mobile number.
                               inputField(
                                 controller: emailController,
-                                hintText:
-                                    'Email or Mobile Number',
+                                hintText: 'Email or Mobile Number',
                                 icon: Icons.email_outlined,
-                                keyboardType:
-                                    TextInputType.emailAddress,
+                                keyboardType: TextInputType.emailAddress,
                               ),
 
                               const SizedBox(height: 8),
 
+                              // Password with visibility toggle.
                               inputField(
                                 controller: passwordController,
                                 hintText: 'Password',
@@ -555,31 +655,29 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                 suffixIcon: IconButton(
                                   onPressed: () {
                                     setState(() {
-                                      hidePassword =
-                                          !hidePassword;
+                                      hidePassword = !hidePassword;
                                     });
                                   },
                                   icon: Icon(
                                     hidePassword
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
-                                    color:
-                                        const Color(0xFF777F81),
+                                    color: const Color(0xFF777F81),
                                   ),
                                 ),
                               ),
 
+                              // Live password requirement checklist.
                               passwordRequirements(),
 
                               const SizedBox(height: 8),
 
+                              // Confirm password with visibility toggle.
                               inputField(
-                                controller:
-                                    confirmPasswordController,
+                                controller: confirmPasswordController,
                                 hintText: 'Confirm Password',
                                 icon: Icons.lock_outline,
-                                obscureText:
-                                    hideConfirmPassword,
+                                obscureText: hideConfirmPassword,
                                 suffixIcon: IconButton(
                                   onPressed: () {
                                     setState(() {
@@ -591,16 +689,15 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     hideConfirmPassword
                                         ? Icons.visibility_outlined
                                         : Icons.visibility_off_outlined,
-                                    color:
-                                        const Color(0xFF777F81),
+                                    color: const Color(0xFF777F81),
                                   ),
                                 ),
                               ),
 
+                              // Show whether both passwords match.
                               if (confirmPasswordController
                                       .text.isNotEmpty &&
-                                  passwordController
-                                      .text.isNotEmpty)
+                                  passwordController.text.isNotEmpty)
                                 Padding(
                                   padding: const EdgeInsets.only(
                                     left: 8,
@@ -635,68 +732,52 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
                               const SizedBox(height: 8),
 
+                              // Terms and privacy policy agreement.
                               Row(
                                 crossAxisAlignment:
                                     CrossAxisAlignment.start,
                                 children: [
                                   Checkbox(
                                     value: agreedToTerms,
-                                    visualDensity:
-                                        VisualDensity.compact,
-                                    activeColor:
-                                        const Color(0xFFD56369),
+                                    visualDensity: VisualDensity.compact,
+                                    activeColor: const Color(0xFFD56369),
                                     onChanged: (value) {
                                       setState(() {
-                                        agreedToTerms =
-                                            value ?? false;
+                                        agreedToTerms = value ?? false;
                                       });
                                     },
                                   ),
                                   const Expanded(
                                     child: Padding(
-                                      padding: EdgeInsets.only(
-                                        top: 8,
-                                      ),
+                                      padding: EdgeInsets.only(top: 8),
                                       child: Text.rich(
                                         TextSpan(
                                           style: TextStyle(
-                                            color:
-                                                Color(0xFF77716F),
+                                            color: Color(0xFF77716F),
                                             fontSize: 15,
                                             height: 1.3,
                                           ),
                                           children: [
                                             TextSpan(
-                                              text:
-                                                  'I agree to the ',
+                                              text: 'I agree to the ',
                                             ),
                                             TextSpan(
-                                              text:
-                                                  'Terms & Conditions',
+                                              text: 'Terms & Conditions',
                                               style: TextStyle(
-                                                color:
-                                                    Color(0xFFC85D66),
-                                                fontWeight:
-                                                    FontWeight.w600,
+                                                color: Color(0xFFC85D66),
+                                                fontWeight: FontWeight.w600,
                                                 decoration:
-                                                    TextDecoration
-                                                        .underline,
+                                                    TextDecoration.underline,
                                               ),
                                             ),
+                                            TextSpan(text: ' and\n'),
                                             TextSpan(
-                                              text: ' and\n',
-                                            ),
-                                            TextSpan(
-                                              text:
-                                                  'Privacy Policy',
+                                              text: 'Privacy Policy',
                                               style: TextStyle(
-                                                color:
-                                                    Color(0xFFC85D66),
-                                                fontWeight:
-                                                    FontWeight.w600,
+                                                color: Color(0xFFC85D66),
+                                                fontWeight: FontWeight.w600,
                                                 decoration:
-                                                    TextDecoration
-                                                        .underline,
+                                                    TextDecoration.underline,
                                               ),
                                             ),
                                           ],
@@ -709,35 +790,30 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
                               const SizedBox(height: 4),
 
+                              // Create account button.
                               SizedBox(
                                 width: double.infinity,
                                 height: 54,
                                 child: ElevatedButton(
                                   onPressed: createAccount,
-                                  style:
-                                      ElevatedButton.styleFrom(
+                                  style: ElevatedButton.styleFrom(
                                     backgroundColor:
                                         const Color(0xFFD56369),
-                                    foregroundColor:
-                                        Colors.white,
+                                    foregroundColor: Colors.white,
                                     elevation: 0,
-                                    shape:
-                                        RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(32),
                                     ),
                                   ),
                                   child: const Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment
-                                            .spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       SizedBox(width: 20),
                                       Text(
                                         'Create Account',
-                                        style: TextStyle(
-                                          fontSize: 18,
-                                        ),
+                                        style: TextStyle(fontSize: 18),
                                       ),
                                       Icon(
                                         Icons.arrow_forward,
@@ -750,31 +826,28 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
                               const SizedBox(height: 9),
 
+                              // Divider separating the form from login.
                               Row(
                                 children: [
                                   const Expanded(
                                     child: Divider(
-                                      color:
-                                          Color(0xFFD8D0CB),
+                                      color: Color(0xFFD8D0CB),
                                     ),
                                   ),
                                   const Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(
+                                    padding: EdgeInsets.symmetric(
                                       horizontal: 15,
                                     ),
                                     child: Text(
                                       'OR',
                                       style: TextStyle(
-                                        color:
-                                            Color(0xFF77716F),
+                                        color: Color(0xFF77716F),
                                       ),
                                     ),
                                   ),
                                   const Expanded(
                                     child: Divider(
-                                      color:
-                                          Color(0xFFD8D0CB),
+                                      color: Color(0xFFD8D0CB),
                                     ),
                                   ),
                                 ],
@@ -782,6 +855,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
 
                               const SizedBox(height: 9),
 
+                              // Return to the previous page to log in.
                               SizedBox(
                                 width: double.infinity,
                                 height: 52,
@@ -789,17 +863,14 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  style:
-                                      OutlinedButton.styleFrom(
+                                  style: OutlinedButton.styleFrom(
                                     foregroundColor:
                                         const Color(0xFFD56369),
                                     side: const BorderSide(
-                                      color:
-                                          Color(0xFFD56369),
+                                      color: Color(0xFFD56369),
                                       width: 1.5,
                                     ),
-                                    shape:
-                                        RoundedRectangleBorder(
+                                    shape: RoundedRectangleBorder(
                                       borderRadius:
                                           BorderRadius.circular(32),
                                     ),
@@ -808,8 +879,7 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                     TextSpan(
                                       style: TextStyle(
                                         fontSize: 17,
-                                        color:
-                                            Color(0xFF77716F),
+                                        color: Color(0xFF77716F),
                                       ),
                                       children: [
                                         TextSpan(
@@ -819,10 +889,8 @@ class _CreateAccountPageState extends State<CreateAccountPage> {
                                         TextSpan(
                                           text: 'Log In',
                                           style: TextStyle(
-                                            color:
-                                                Color(0xFFD56369),
-                                            fontWeight:
-                                                FontWeight.w600,
+                                            color: Color(0xFFD56369),
+                                            fontWeight: FontWeight.w600,
                                           ),
                                         ),
                                       ],
