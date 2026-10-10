@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
-import 'page3.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class ForgotPasswordPage extends StatefulWidget {
+  const ForgotPasswordPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<ForgotPasswordPage> createState() =>
+      _ForgotPasswordPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _ForgotPasswordPageState
+    extends State<ForgotPasswordPage> {
+
   // --------------------------------------------------
-  // TEXT CONTROLLERS
+  // TEXT CONTROLLER
   // --------------------------------------------------
 
   final TextEditingController emailController =
       TextEditingController();
-
-  final TextEditingController passwordController =
-      TextEditingController();
-
-  // --------------------------------------------------
-  // VARIABLES
-  // --------------------------------------------------
-
-  bool rememberMe = false;
-  bool hidePassword = true;
 
   // --------------------------------------------------
   // CLEAN UP
@@ -33,23 +25,21 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void dispose() {
     emailController.dispose();
-    passwordController.dispose();
     super.dispose();
   }
 
   // --------------------------------------------------
-  // LOGIN
+  // RESET PASSWORD
   // --------------------------------------------------
 
-  void login() {
+  void sendResetLink() {
     final email = emailController.text.trim();
-    final password = passwordController.text;
 
-    if (email.isEmpty || password.isEmpty) {
+    if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text(
-            'Please enter your email/mobile number and password.',
+            'Please enter your email/mobile number.',
           ),
         ),
       );
@@ -59,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Login button pressed!'),
+        content: Text('Reset link sent!'),
       ),
     );
   }
@@ -88,53 +78,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // --------------------------------------------------
-  // DECORATIVE UNDERLINE
-  // --------------------------------------------------
-
-  Widget decorativeLine() {
-    return SizedBox(
-      height: 18,
-      width: 190,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Left line
-          Expanded(
-            child: Container(
-              height: 1.2,
-              color: const Color(0xFF8B4038),
-            ),
-          ),
-
-          const SizedBox(width: 8),
-
-          // Diamond
-          Transform.rotate(
-            angle: 0.785398,
-            child: Container(
-              width: 9,
-              height: 9,
-              decoration: const BoxDecoration(
-                color: Color(0xFFD5A94F),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: 8),
-
-          // Right line
-          Expanded(
-            child: Container(
-              height: 1.2,
-              color: const Color(0xFF8B4038),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // --------------------------------------------------
   // MAIN UI
   // --------------------------------------------------
 
@@ -142,10 +85,21 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
+      resizeToAvoidBottomInset: true,
 
       body: LayoutBuilder(
         builder: (context, constraints) {
           final screenHeight = constraints.maxHeight;
+
+          // Full screen height remains unchanged
+          // when the keyboard opens.
+          final fullScreenHeight =
+              MediaQuery.of(context).size.height;
+
+          final keyboardHeight =
+              MediaQuery.of(context).viewInsets.bottom;
+
+          final keyboardOpen = keyboardHeight > 0;
 
           return Stack(
             children: [
@@ -194,7 +148,8 @@ class _LoginPageState extends State<LoginPage> {
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.12),
+                              color:
+                                  Colors.black.withValues(alpha: 0.12),
                               blurRadius: 8,
                               offset: const Offset(0, 3),
                             ),
@@ -203,7 +158,9 @@ class _LoginPageState extends State<LoginPage> {
                         child: IconButton(
                           padding: EdgeInsets.zero,
                           onPressed: () {
-                            Navigator.pop(context);
+                            if (Navigator.canPop(context)) {
+                              Navigator.pop(context);
+                            }
                           },
                           icon: const Icon(
                             Icons.arrow_back,
@@ -215,72 +172,85 @@ class _LoginPageState extends State<LoginPage> {
                     ),
 
                     // ==================================
-                    // LOGO + TAGLINE
-                    // ==================================
-
-                    Positioned(
-                      top: screenHeight * 0.08,
-                      left: 0,
-                      right: 0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-
-                          // ------------------------------
-                          // VYOM LOGO
-                          // ------------------------------
-
-                          Image.asset(
-                            'assets/logo.png',
-                            width: 185,
-                            fit: BoxFit.contain,
-                          ),
-
-                          const SizedBox(height: 8),
-
-                          // ------------------------------
-                          // TAGLINE
-                          // ------------------------------
-
-                          const Text(
-                            'Reconnect with the Roots',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w500,
-                              letterSpacing: 0.4,
-                              color: Color(0xFF7B4038),
-                            ),
-                          ),
-
-                          const SizedBox(height: 5),
-
-                          // ------------------------------
-                          // DECORATIVE LINE + DIAMOND
-                          // ------------------------------
-
-                          decorativeLine(),
-                        ],
-                      ),
-                    ),
-
-                    // ==================================
-                    // LOGIN CARD
+                    // FORGOT PASSWORD TITLE
                     // ==================================
 
                     Positioned(
                       left: 24,
                       right: 24,
-                      bottom: 20,
+                      top: screenHeight * 0.16,
+                      child: RichText(
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Forgot\n',
+                              style: TextStyle(
+                                fontFamily: 'Georgia',
+                                fontSize: 38,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF24443C),
+                                height: 0.98,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Password?',
+                              style: TextStyle(
+                                fontFamily: 'Georgia',
+                                fontSize: 38,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFFD56369),
+                                height: 0.98,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // ==================================
+                    // DESCRIPTION
+                    // ==================================
+
+                    Positioned(
+                      left: 24,
+                      right: 24,
+
+                      // Uses full screen height so the
+                      // description does not move when
+                      // the keyboard opens.
+                      top: fullScreenHeight * 0.255,
+
+                      child: const Text(
+                        "No worries! Enter your registered\n"
+                        "email or mobile number and we'll\n"
+                        "send you a reset link.",
+                        style: TextStyle(
+                          fontSize: 17,
+                          height: 1.25,
+                          color: Color(0xFF77716F),
+                        ),
+                      ),
+                    ),
+
+                    // ==================================
+                    // FORGOT PASSWORD FORM CARD
+                    // ==================================
+
+                    AnimatedPositioned(
+                      duration:
+                          const Duration(milliseconds: 180),
+                      curve: Curves.easeOut,
+
+                      left: 24,
+                      right: 24,
+
+                      bottom: keyboardOpen
+                          ? screenHeight * 0.28
+                          : screenHeight * 0.18,
 
                       child: Container(
                         width: double.infinity,
 
-                        // Small-phone protection:
-                        // The card keeps its normal size on
-                        // regular phones, but gets a maximum
-                        // height when the available screen
-                        // becomes too short.
                         constraints: BoxConstraints(
                           maxHeight: screenHeight - 40,
                         ),
@@ -294,11 +264,13 @@ class _LoginPageState extends State<LoginPage> {
 
                         decoration: BoxDecoration(
                           color: const Color(0xFFFFF9F4),
-                          borderRadius: BorderRadius.circular(32),
+                          borderRadius:
+                              BorderRadius.circular(32),
 
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.08),
+                              color:
+                                  Colors.black.withValues(alpha: 0.08),
                               blurRadius: 18,
                               offset: const Offset(0, 6),
                             ),
@@ -307,7 +279,8 @@ class _LoginPageState extends State<LoginPage> {
 
                         child: SingleChildScrollView(
                           keyboardDismissBehavior:
-                              ScrollViewKeyboardDismissBehavior.onDrag,
+                              ScrollViewKeyboardDismissBehavior
+                                  .onDrag,
 
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -316,44 +289,12 @@ class _LoginPageState extends State<LoginPage> {
 
                             children: [
 
-                              // ==============================
-                              // TITLE
-                              // ==============================
-
-                              const Text(
-                                'Welcome Back!',
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF24443C),
-                                  height: 1.1,
-                                ),
-                              ),
-
-                              const SizedBox(height: 0),
-
-                              // ==============================
-                              // SUBTITLE
-                              // ==============================
-
-                              const Text(
-                                'Log in to continue your journey\nwith Vyom.',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  height: 1.25,
-                                  color: Color(0xFF77716F),
-                                ),
-                              ),
-
-                              const SizedBox(height: 12),
-
-                              // ==============================
-                              // EMAIL FIELD
-                              // ==============================
+                              // ==================================
+                              // EMAIL / MOBILE INPUT
+                              // ==================================
 
                               TextField(
                                 controller: emailController,
-
                                 keyboardType:
                                     TextInputType.emailAddress,
 
@@ -384,10 +325,10 @@ class _LoginPageState extends State<LoginPage> {
                                   border: OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.circular(32),
-
                                     borderSide:
                                         const BorderSide(
-                                      color: Color(0xFFF0C5C7),
+                                      color:
+                                          Color(0xFFF0C5C7),
                                     ),
                                   ),
 
@@ -395,10 +336,10 @@ class _LoginPageState extends State<LoginPage> {
                                       OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.circular(32),
-
                                     borderSide:
                                         const BorderSide(
-                                      color: Color(0xFFF0C5C7),
+                                      color:
+                                          Color(0xFFF0C5C7),
                                     ),
                                   ),
 
@@ -406,10 +347,10 @@ class _LoginPageState extends State<LoginPage> {
                                       OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.circular(32),
-
                                     borderSide:
                                         const BorderSide(
-                                      color: Color(0xFFD56369),
+                                      color:
+                                          Color(0xFFD56369),
                                       width: 2,
                                     ),
                                   ),
@@ -418,179 +359,23 @@ class _LoginPageState extends State<LoginPage> {
 
                               const SizedBox(height: 8),
 
-                              // ==============================
-                              // PASSWORD FIELD
-                              // ==============================
-
-                              TextField(
-                                controller:
-                                    passwordController,
-
-                                obscureText: hidePassword,
-
-                                decoration: InputDecoration(
-                                  hintText: 'Password',
-
-                                  hintStyle: const TextStyle(
-                                    color: Color(0xFF77716F),
-                                  ),
-
-                                  prefixIcon:
-                                      circularInputIcon(
-                                    Icons.lock_outline,
-                                  ),
-
-                                  suffixIcon: IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        hidePassword =
-                                            !hidePassword;
-                                      });
-                                    },
-
-                                    icon: Icon(
-                                      hidePassword
-                                          ? Icons
-                                              .visibility_outlined
-                                          : Icons
-                                              .visibility_off_outlined,
-
-                                      color:
-                                          const Color(0xFF777F81),
-                                    ),
-                                  ),
-
-                                  filled: true,
-
-                                  fillColor:
-                                      const Color(0xFFFFFAF7),
-
-                                  contentPadding:
-                                      const EdgeInsets.symmetric(
-                                    vertical: 14,
-                                    horizontal: 16,
-                                  ),
-
-                                  border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(32),
-
-                                    borderSide:
-                                        const BorderSide(
-                                      color: Color(0xFFF0C5C7),
-                                    ),
-                                  ),
-
-                                  enabledBorder:
-                                      OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(32),
-
-                                    borderSide:
-                                        const BorderSide(
-                                      color: Color(0xFFF0C5C7),
-                                    ),
-                                  ),
-
-                                  focusedBorder:
-                                      OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.circular(32),
-
-                                    borderSide:
-                                        const BorderSide(
-                                      color: Color(0xFFD56369),
-                                      width: 2,
-                                    ),
-                                  ),
-                                ),
-                              ),
-
-                              const SizedBox(height: 2),
-
-                              // ==============================
-                              // REMEMBER ME / FORGOT PASSWORD
-                              // ==============================
-
-                              Row(
-                                children: [
-
-                                  Checkbox(
-                                    value: rememberMe,
-
-                                    visualDensity:
-                                        VisualDensity.compact,
-
-                                    activeColor:
-                                        const Color(0xFFD56369),
-
-                                    onChanged: (value) {
-                                      setState(() {
-                                        rememberMe =
-                                            value ?? false;
-                                      });
-                                    },
-                                  ),
-
-                                  const Text(
-                                    'Remember Me',
-                                    style: TextStyle(
-                                      color: Color(0xFF77716F),
-                                      fontSize: 15,
-                                    ),
-                                  ),
-
-                                  const Spacer(),
-
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ForgotPasswordPage(),
-                                        ),
-                                      );
-                                    },
-
-                                    child: const Text(
-                                      'Forgot Password?',
-
-                                      style: TextStyle(
-                                        color:
-                                            Color(0xFFD56369),
-
-                                        fontSize: 15,
-
-                                        decoration:
-                                            TextDecoration.underline,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-
-                              const SizedBox(height: 2),
-
-                              // ==============================
-                              // LOGIN BUTTON
-                              // ==============================
+                              // ==================================
+                              // SEND RESET LINK BUTTON
+                              // ==================================
 
                               SizedBox(
                                 width: double.infinity,
                                 height: 54,
 
                                 child: ElevatedButton(
-                                  onPressed: login,
+                                  onPressed: sendResetLink,
 
                                   style:
                                       ElevatedButton.styleFrom(
                                     backgroundColor:
                                         const Color(0xFFD56369),
-
                                     foregroundColor:
                                         Colors.white,
-
                                     elevation: 0,
 
                                     shape:
@@ -606,12 +391,10 @@ class _LoginPageState extends State<LoginPage> {
                                             .spaceBetween,
 
                                     children: [
-
                                       SizedBox(width: 20),
 
                                       Text(
-                                        'Log In',
-
+                                        'Send Reset Link',
                                         style: TextStyle(
                                           fontSize: 18,
                                         ),
@@ -628,13 +411,12 @@ class _LoginPageState extends State<LoginPage> {
 
                               const SizedBox(height: 9),
 
-                              // ==============================
+                              // ==================================
                               // OR DIVIDER
-                              // ==============================
+                              // ==================================
 
                               Row(
                                 children: [
-
                                   const Expanded(
                                     child: Divider(
                                       color:
@@ -647,10 +429,8 @@ class _LoginPageState extends State<LoginPage> {
                                         EdgeInsets.symmetric(
                                       horizontal: 15,
                                     ),
-
                                     child: Text(
                                       'OR',
-
                                       style: TextStyle(
                                         color:
                                             Color(0xFF77716F),
@@ -669,16 +449,22 @@ class _LoginPageState extends State<LoginPage> {
 
                               const SizedBox(height: 9),
 
-                              // ==============================
-                              // CREATE ACCOUNT
-                              // ==============================
+                              // ==================================
+                              // BACK TO LOGIN BUTTON
+                              // ==================================
 
                               SizedBox(
                                 width: double.infinity,
                                 height: 52,
 
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (Navigator.canPop(
+                                      context,
+                                    )) {
+                                      Navigator.pop(context);
+                                    }
+                                  },
 
                                   style:
                                       OutlinedButton.styleFrom(
@@ -699,8 +485,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
 
                                   child: const Text(
-                                    'Create New Account',
-
+                                    'Back to Login',
                                     style: TextStyle(
                                       fontSize: 17,
                                       fontWeight:
