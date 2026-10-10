@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'page3.dart';
+import 'page4.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -98,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Left line
           Expanded(
             child: Container(
               height: 1.2,
@@ -108,7 +108,6 @@ class _LoginPageState extends State<LoginPage> {
 
           const SizedBox(width: 8),
 
-          // Diamond
           Transform.rotate(
             angle: 0.785398,
             child: Container(
@@ -122,7 +121,6 @@ class _LoginPageState extends State<LoginPage> {
 
           const SizedBox(width: 8),
 
-          // Right line
           Expanded(
             child: Container(
               height: 1.2,
@@ -226,10 +224,6 @@ class _LoginPageState extends State<LoginPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
 
-                          // ------------------------------
-                          // VYOM LOGO
-                          // ------------------------------
-
                           Image.asset(
                             'assets/logo.png',
                             width: 185,
@@ -237,10 +231,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
 
                           const SizedBox(height: 8),
-
-                          // ------------------------------
-                          // TAGLINE
-                          // ------------------------------
 
                           const Text(
                             'Reconnect with the Roots',
@@ -254,10 +244,6 @@ class _LoginPageState extends State<LoginPage> {
                           ),
 
                           const SizedBox(height: 5),
-
-                          // ------------------------------
-                          // DECORATIVE LINE + DIAMOND
-                          // ------------------------------
 
                           decorativeLine(),
                         ],
@@ -276,11 +262,6 @@ class _LoginPageState extends State<LoginPage> {
                       child: Container(
                         width: double.infinity,
 
-                        // Small-phone protection:
-                        // The card keeps its normal size on
-                        // regular phones, but gets a maximum
-                        // height when the available screen
-                        // becomes too short.
                         constraints: BoxConstraints(
                           maxHeight: screenHeight - 40,
                         ),
@@ -353,7 +334,6 @@ class _LoginPageState extends State<LoginPage> {
 
                               TextField(
                                 controller: emailController,
-
                                 keyboardType:
                                     TextInputType.emailAddress,
 
@@ -678,7 +658,15 @@ class _LoginPageState extends State<LoginPage> {
                                 height: 52,
 
                                 child: OutlinedButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const CreateAccountPage(),
+                                      ),
+                                    );
+                                  },
 
                                   style:
                                       OutlinedButton.styleFrom(
