@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'page6.dart';
 
 class CreateProfilePage extends StatefulWidget {
   const CreateProfilePage({super.key});
@@ -332,11 +333,12 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
       return;
     }
 
-    // Placeholder until profile saving and navigation
-    // to the next page are connected.
-    showMessage(
-      'Profile details ready: '
-      '${usernameController.text.trim()}, age $age.',
+    //  navigation to the next page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CreateAvatarPage() 
+      ),
     );
   }
 
@@ -402,7 +404,6 @@ class _CreateProfilePageState extends State<CreateProfilePage> {
                   ),
                 ),
               ),
-
               // ------------------------------------------
               // SUBTLE OVERLAY
               // ------------------------------------------
