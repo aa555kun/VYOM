@@ -62,7 +62,9 @@ flutter:
     - assets/logo.png
     - assets/bg/bg1.jpg
     - assets/bg/bg2.jpg
-    - assets/bg/bg3.jpg
+    - assets/bg/bg3.png
+    - assets/elements/board1.png
+    - assets/elements/stage.png
     - assets/images/profile_card.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
