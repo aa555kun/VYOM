@@ -67,7 +67,8 @@ flutter:
     - assets/elements/stage.png
     - assets/images/profile_card.png
     - assets/avatar/base/base1.png
-    
+    - assets/avatar/base/base2.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
