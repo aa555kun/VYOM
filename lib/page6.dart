@@ -5,122 +5,212 @@ class CreateAvatarPage extends StatefulWidget {
   const CreateAvatarPage({super.key});
 
   @override
-  State<CreateAvatarPage> createState() =>
-      _CreateAvatarPageState();
+  State<CreateAvatarPage> createState() => _CreateAvatarPageState();
 }
 
 class _CreateAvatarPageState extends State<CreateAvatarPage> {
+  final List<String> avatarBases = [
+    'assets/avatar/base/base1.png',
+    'assets/avatar/base/base2.png',
+    'assets/avatar/base/base3.png',
+    'assets/avatar/base/base4.png',
+    'assets/avatar/base/base5.png',
+    'assets/avatar/base/base6.png',
+  ];
+
+  final List<Color> skinToneColors = [
+    const Color(0xFFF8DCC0),
+    const Color(0xFFECC29B),
+    const Color(0xFFDCA579),
+    const Color(0xFFC58A60),
+    const Color(0xFFA96F4C),
+    const Color(0xFF805035),
+  ];
+
+  int selectedBaseIndex = 0;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       extendBodyBehindAppBar: true,
-
       body: LayoutBuilder(
         builder: (context, constraints) {
+          final screenWidth = constraints.maxWidth;
           final screenHeight = constraints.maxHeight;
 
           return Stack(
+            fit: StackFit.expand,
             children: [
-
-              // ======================================
-              // FULL SCREEN BACKGROUND
-              // ======================================
-
-              Positioned.fill(
-                child: Image.asset(
-                  'assets/bg/bg3.png',
-                  fit: BoxFit.cover,
-                ),
+              // Background
+              Image.asset(
+                'assets/bg/bg3.png',
+                fit: BoxFit.cover,
               ),
 
-              // ======================================
-              // VERY LIGHT OVERLAY
-              // ======================================
-
-              Positioned.fill(
-                child: Container(
-                  color: Colors.black.withValues(alpha: 0.02),
-                ),
+              // Subtle background overlay
+              Container(
+                color: Colors.black.withValues(alpha: 0.02),
               ),
-
-              // ======================================
-              // FOREGROUND CONTENT
-              // ======================================
 
               SafeArea(
                 child: Stack(
                   children: [
-
-                    // ==================================
-                    // TITLE BOARD + TEXT
-                    // ==================================
-
+                    // 1. TITLE BOX — BACK
                     Positioned(
-                      top: screenHeight * 0.055,
-                      left: 20,
-                      right: 20,
+                      top: -screenHeight * 0.025,
+                      left: 30,
+                      right: 30,
                       child: SizedBox(
-                        height: screenHeight * 0.22,
+                        height: screenHeight * 0.18,
                         child: Stack(
                           alignment: Alignment.center,
                           children: [
-
-                            // TITLE BOARD
-
                             Image.asset(
                               'assets/elements/board1.png',
-                              width: constraints.maxWidth * 0.85,
-                              height: screenHeight * 0.22,
+                              width: screenWidth * 0.75,
+                              height: screenHeight * 0.18,
                               fit: BoxFit.contain,
                             ),
-
-                            // TITLE TEXT
-
-                            Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-
-                                const Text(
-                                  'Customize Your',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF155E49),
-                                    height: 1.1,
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: screenHeight * 0.005,
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    'Create Your',
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.062,
+                                      height: 1.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFF155E49),
+                                    ),
                                   ),
-                                ),
-
-                                const Text(
-                                  'Avatar',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFC65359),
-                                    height: 1.1,
+                                  Text(
+                                    'Avatar',
+                                    style: TextStyle(
+                                      fontSize: screenWidth * 0.09,
+                                      height: 1.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: const Color(0xFFC65359),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ],
                         ),
                       ),
                     ),
 
-                    // ==================================
-                    // AVATAR STAGE
-                    // ==================================
-
+                    // 2. STAGE — BEHIND THE AVATAR
                     Positioned(
                       left: 0,
                       right: 0,
-                      top: screenHeight * 0.43,
+                      top: screenHeight * 0.48,
                       child: Center(
                         child: Image.asset(
                           'assets/elements/stage.png',
-                          width: constraints.maxWidth * 0.78,
+                          width: screenWidth * 0.78,
                           fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+
+                    // 3. AVATAR — IN FRONT OF THE STAGE
+                    Positioned(
+                      left: 0,
+                      right: 0,
+                      top: screenHeight * 0.15,
+                      child: Center(
+                        child: SizedBox(
+                          height: screenHeight * 0.40,
+                          child: Image.asset(
+                            avatarBases[selectedBaseIndex],
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    // 4. SKIN TONE SELECTOR — FRONTMOST
+                    Positioned(
+                      left: 20,
+                      right: 20,
+                      bottom: screenHeight * 0.025,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF9F4),
+                          borderRadius: BorderRadius.circular(28),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.12),
+                              blurRadius: 12,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Text(
+                              'Choose Skin Tone',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF24443C),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceEvenly,
+                              children: List.generate(
+                                skinToneColors.length,
+                                (index) {
+                                  final isSelected =
+                                      selectedBaseIndex == index;
+
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedBaseIndex = index;
+                                      });
+                                    },
+                                    child: AnimatedContainer(
+                                      duration:
+                                          const Duration(milliseconds: 180),
+                                      width: screenWidth * 0.095,
+                                      height: screenWidth * 0.095,
+                                      decoration: BoxDecoration(
+                                        color: skinToneColors[index],
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: isSelected
+                                              ? const Color(0xFFD56369)
+                                              : Colors.white,
+                                          width: isSelected ? 3 : 1.5,
+                                        ),
+                                      ),
+                                      child: isSelected
+                                          ? const Icon(
+                                              Icons.check,
+                                              color: Color(0xFF24443C),
+                                              size: 18,
+                                            )
+                                          : null,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
