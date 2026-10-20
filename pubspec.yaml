@@ -72,6 +72,12 @@ flutter:
     - assets/avatar/base/base4.png
     - assets/avatar/base/base5.png
     - assets/avatar/base/base6.png
+    - assets/avatar/hairstyle/hair1.png
+    - assets/avatar/hairstyle/hair2.png
+    - assets/avatar/hairstyle/hair3.png
+    - assets/avatar/hairstyle/hair4.png
+    - assets/avatar/hairstyle/hair5.png
+    - assets/avatar/hairstyle/hair6.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
