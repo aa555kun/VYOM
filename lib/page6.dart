@@ -135,7 +135,7 @@ class _CreateAvatarPageState extends State<CreateAvatarPage> {
                     ),
 
                     // --------------------------------------------------
-                    // 2. STAGE — MOVED UP
+                    // 2. STAGE
                     // --------------------------------------------------
 
                     Positioned(
@@ -223,16 +223,23 @@ class _CreateAvatarPageState extends State<CreateAvatarPage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                // SKIN TONE HEADING WITH PALETTE ICON
+                                // LEFT-ALIGNED SKIN TONE HEADING
 
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Icon(
-                                      Icons.palette_outlined,
-                                      color: Color(0xFFD56369),
-                                      size: 22,
+                                    Container(
+                                      width: 36,
+                                      height: 36,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFFBE5E5),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.palette_outlined,
+                                        color: Color(0xFFD56369),
+                                        size: 20,
+                                      ),
                                     ),
                                     const SizedBox(width: 8),
                                     const Text(
@@ -247,6 +254,8 @@ class _CreateAvatarPageState extends State<CreateAvatarPage> {
                                 ),
 
                                 const SizedBox(height: 12),
+
+                                // SKIN TONE OPTIONS
 
                                 Row(
                                   mainAxisAlignment:
@@ -320,16 +329,23 @@ class _CreateAvatarPageState extends State<CreateAvatarPage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                // HAIRSTYLE HEADING WITH ICON
+                                // LEFT-ALIGNED HAIRSTYLE HEADING
 
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    const Icon(
-                                      Icons.content_cut,
-                                      color: Color(0xFFD56369),
-                                      size: 22,
+                                    Container(
+                                      width: 36,
+                                      height: 36,
+                                      decoration: const BoxDecoration(
+                                        color: Color(0xFFFBE5E5),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.content_cut,
+                                        color: Color(0xFFD56369),
+                                        size: 20,
+                                      ),
                                     ),
                                     const SizedBox(width: 8),
                                     const Text(
@@ -344,6 +360,8 @@ class _CreateAvatarPageState extends State<CreateAvatarPage> {
                                 ),
 
                                 const SizedBox(height: 10),
+
+                                // HAIRSTYLE OPTIONS
 
                                 Row(
                                   mainAxisAlignment:
