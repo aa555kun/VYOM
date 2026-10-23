@@ -68,12 +68,14 @@ class _CreateAvatarPageState extends State<CreateAvatarPage> {
             fit: StackFit.expand,
             children: [
               // Background
+
               Image.asset(
                 'assets/bg/bg3.png',
                 fit: BoxFit.cover,
               ),
 
               // Subtle background overlay
+
               Container(
                 color: Colors.black.withValues(alpha: 0.02),
               ),
@@ -196,223 +198,282 @@ class _CreateAvatarPageState extends State<CreateAvatarPage> {
                     Positioned(
                       left: 20,
                       right: 20,
-                      bottom: screenHeight * 0.025,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          // SKIN TONE SELECTOR
+                      bottom: screenHeight * 0.015,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            // SKIN TONE SELECTOR
 
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 12,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFF9F4),
-                              borderRadius: BorderRadius.circular(28),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(
-                                    alpha: 0.12,
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 12,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFF9F4),
+                                borderRadius: BorderRadius.circular(28),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(
+                                      alpha: 0.12,
+                                    ),
+                                    blurRadius: 12,
+                                    offset: const Offset(0, 4),
                                   ),
-                                  blurRadius: 12,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // LEFT-ALIGNED SKIN TONE HEADING
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // LEFT-ALIGNED SKIN TONE HEADING
 
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 36,
-                                      height: 36,
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFFFBE5E5),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const Icon(
-                                        Icons.palette_outlined,
-                                        color: Color(0xFFD56369),
-                                        size: 20,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    const Text(
-                                      'Choose Skin Tone',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF24443C),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                const SizedBox(height: 12),
-
-                                // SKIN TONE OPTIONS
-
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: List.generate(
-                                    skinToneColors.length,
-                                    (index) {
-                                      final isSelected =
-                                          selectedBaseIndex == index;
-
-                                      return GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedBaseIndex = index;
-                                          });
-                                        },
-                                        child: AnimatedContainer(
-                                          duration: const Duration(
-                                            milliseconds: 180,
-                                          ),
-                                          width: screenWidth * 0.095,
-                                          height: screenWidth * 0.095,
-                                          decoration: BoxDecoration(
-                                            color: skinToneColors[index],
-                                            shape: BoxShape.circle,
-                                            border: Border.all(
-                                              color: isSelected
-                                                  ? const Color(0xFFD56369)
-                                                  : Colors.white,
-                                              width: isSelected ? 3 : 1.5,
-                                            ),
-                                          ),
-                                          child: isSelected
-                                              ? const Icon(
-                                                  Icons.check,
-                                                  color: Color(0xFF24443C),
-                                                  size: 18,
-                                                )
-                                              : null,
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 36,
+                                        height: 36,
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xFFFBE5E5),
+                                          shape: BoxShape.circle,
                                         ),
-                                      );
-                                    },
+                                        child: const Icon(
+                                          Icons.palette_outlined,
+                                          color: Color(0xFFD56369),
+                                          size: 20,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      const Text(
+                                        'Choose Skin Tone',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF24443C),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
 
-                          const SizedBox(height: 8),
+                                  const SizedBox(height: 12),
 
-                          // HAIRSTYLE SELECTOR
+                                  // SKIN TONE OPTIONS
 
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFF9F4),
-                              borderRadius: BorderRadius.circular(24),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(
-                                    alpha: 0.10,
-                                  ),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 3),
-                                ),
-                              ],
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                // LEFT-ALIGNED HAIRSTYLE HEADING
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: List.generate(
+                                      skinToneColors.length,
+                                      (index) {
+                                        final isSelected =
+                                            selectedBaseIndex == index;
 
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      width: 36,
-                                      height: 36,
-                                      decoration: const BoxDecoration(
-                                        color: Color(0xFFFBE5E5),
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: const Icon(
-                                        Icons.content_cut,
-                                        color: Color(0xFFD56369),
-                                        size: 20,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    const Text(
-                                      'Choose Hairstyle',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF24443C),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                const SizedBox(height: 10),
-
-                                // HAIRSTYLE OPTIONS
-
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: List.generate(
-                                    hairstyles.length,
-                                    (index) {
-                                      final isSelected =
-                                          selectedHairIndex == index;
-
-                                      return GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            selectedHairIndex = index;
-                                          });
-                                        },
-                                        child: AnimatedContainer(
-                                          duration: const Duration(
-                                            milliseconds: 180,
-                                          ),
-                                          width: screenWidth * 0.095,
-                                          height: screenWidth * 0.095,
-                                          decoration: BoxDecoration(
-                                            color: const Color(0xFFFFFAF7),
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            border: Border.all(
-                                              color: isSelected
-                                                  ? const Color(0xFFD56369)
-                                                  : const Color(0xFFF0C5C7),
-                                              width: isSelected ? 2.5 : 1,
+                                        return GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedBaseIndex = index;
+                                            });
+                                          },
+                                          child: AnimatedContainer(
+                                            duration: const Duration(
+                                              milliseconds: 180,
                                             ),
+                                            width: screenWidth * 0.095,
+                                            height: screenWidth * 0.095,
+                                            decoration: BoxDecoration(
+                                              color: skinToneColors[index],
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                color: isSelected
+                                                    ? const Color(0xFFD56369)
+                                                    : Colors.white,
+                                                width: isSelected ? 3 : 1.5,
+                                              ),
+                                            ),
+                                            child: isSelected
+                                                ? const Icon(
+                                                    Icons.check,
+                                                    color: Color(0xFF24443C),
+                                                    size: 18,
+                                                  )
+                                                : null,
                                           ),
-                                          child: Center(
-                                            child: Text(
-                                              '${index + 1}',
-                                              style: const TextStyle(
-                                                color: Color(0xFF24443C),
-                                                fontWeight: FontWeight.bold,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 8),
+
+                            // HAIRSTYLE SELECTOR
+
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 10,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFF9F4),
+                                borderRadius: BorderRadius.circular(24),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(
+                                      alpha: 0.10,
+                                    ),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  // LEFT-ALIGNED HAIRSTYLE HEADING
+
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: 36,
+                                        height: 36,
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xFFFBE5E5),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: const Icon(
+                                          Icons.content_cut,
+                                          color: Color(0xFFD56369),
+                                          size: 20,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      const Text(
+                                        'Choose Hairstyle',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF24443C),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+
+                                  const SizedBox(height: 10),
+
+                                  // HAIRSTYLE OPTIONS
+
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: List.generate(
+                                      hairstyles.length,
+                                      (index) {
+                                        final isSelected =
+                                            selectedHairIndex == index;
+
+                                        return GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              selectedHairIndex = index;
+                                            });
+                                          },
+                                          child: AnimatedContainer(
+                                            duration: const Duration(
+                                              milliseconds: 180,
+                                            ),
+                                            width: screenWidth * 0.095,
+                                            height: screenWidth * 0.095,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFFFFAF7),
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              border: Border.all(
+                                                color: isSelected
+                                                    ? const Color(0xFFD56369)
+                                                    : const Color(0xFFF0C5C7),
+                                                width: isSelected ? 2.5 : 1,
+                                              ),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                '${index + 1}',
+                                                style: const TextStyle(
+                                                  color: Color(0xFF24443C),
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ),
                                           ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            const SizedBox(height: 12),
+
+                            // --------------------------------------------------
+                            // 6. SAVE LOOK BUTTON
+                            // --------------------------------------------------
+
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: screenWidth * 0.10,
+                              ),
+                              child: SizedBox(
+                                width: double.infinity,
+                                height: screenHeight * 0.06,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Your avatar look is saved!',
                                         ),
-                                      );
-                                    },
+                                      ),
+                                    );
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: const Color(0xFF17634F),
+                                    foregroundColor: Colors.white,
+                                    elevation: 3,
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 20,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(40),
+                                    ),
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Center(
+                                        child: Text(
+                                          'Save Look',
+                                          style: TextStyle(
+                                            fontSize: screenWidth * 0.045,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                      const Positioned(
+                                        right: 0,
+                                        child: Icon(
+                                          Icons.arrow_forward,
+                                          size: 26,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ],
